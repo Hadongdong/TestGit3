@@ -18,6 +18,7 @@ import com.google.api.ResourceDescriptor
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import java.util.*
 
 
@@ -87,7 +88,7 @@ class SearchFragment : Fragment() {
             (mBinding?.rvSearchnotice?.adapter as NoticeAdapter).search2(mBinding?.searchWord?.text.toString(), searchOption)
             //searchword에서 문자열을 가져와 hashMap으로 만듦
             val input = mBinding?.searchWord
-            val data = hashMapOf("history" to input?.text?.toString())
+            val data = hashMapOf("history" to input?.text?.toString(), "timestamp" to FieldValue.serverTimestamp())
             //검색어 기록
             (mBinding?.rvSearchhistory?.adapter as HistoryAdapter).search3(data, searchOption2)
         }
@@ -120,15 +121,16 @@ class SearchFragment : Fragment() {
                 }
             }
        }
+        (mBinding?.rvSearchhistory?.adapter as HistoryAdapter).getDataFromFirestore()
     }
     //검색기록 추가
-    fun HistoryAdapter.search3(word: HashMap<String, String?>, option: String) {
+    fun HistoryAdapter.search3(word: HashMap<String, Any?>, option: String) {
         db.collection("History")
             .add(word)
             .addOnSuccessListener {
                 // 성공할 경우
                 db.collection("History")//작업할 컬렉션
-                    //.orderBy("")
+                    .orderBy("timestamp", Query.Direction.DESCENDING)
                     .get() // 문서 가져오기
                     .addOnSuccessListener { result ->
                         historyList.clear()
@@ -153,7 +155,7 @@ class SearchFragment : Fragment() {
     //파이어베이스에서 모든검색 결과 가져오기
     fun NoticeAdapter.search2(searchWord: String, option: String) {
         db.collection("total")   // 작업할 컬렉션
-            .orderBy("date")
+            .orderBy("date",Query.Direction.DESCENDING)
             .get()      // 문서 가져오기
             .addOnSuccessListener { result ->
                 // 성공할 경우
@@ -190,7 +192,7 @@ class SearchFragment : Fragment() {
     //검색기록의 검색어 클릭통해 공지사항보기 함수
     fun NoticeAdapter.move(word: String, option: String) {
         db.collection("total")   // 작업할 컬렉션2
-            //.orderBy()
+            .orderBy("date",Query.Direction.DESCENDING)
             .get()      // 문서 가져오기
             .addOnSuccessListener { result ->
                 // 성공할 경우
@@ -211,7 +213,7 @@ class SearchFragment : Fragment() {
 //이전 검색어 삭제 관련부분:https://stackoverflow.com/questions/64370610/android-kotlin-how-can-i-delete-the-data-from-firebase
     fun HistoryAdapter.getDataFromFirestore() {
         db.collection("History")
-            //.orderBy()
+            .orderBy("timestamp", Query.Direction.DESCENDING)
             .addSnapshotListener{ snapshot, exception ->
                 if (exception != null) {
                 }

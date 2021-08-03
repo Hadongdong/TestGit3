@@ -15,6 +15,7 @@ import com.example.noticesubscribe.NoticeAdapter
 import com.example.noticesubscribe.R
 import com.example.noticesubscribe.databinding.FragmentAllnoticeBinding
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 
 
 class AllnoticeFragment : Fragment() {
@@ -51,6 +52,7 @@ class AllnoticeFragment : Fragment() {
     //전체공지사항 보이기
     fun NoticeAdapter.load(){
         db.collection("total")
+            .orderBy("date", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {

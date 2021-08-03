@@ -62,7 +62,7 @@ class HomeFragment : Fragment() {
         val notice_list = arrayListOf<Notice>()
         //현재의 구독키워드 보여줌
         db.collection("Contacts")
-           // .orderBy()
+            .orderBy("timestamp", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
@@ -91,7 +91,7 @@ class HomeFragment : Fragment() {
     //키워드 클릭시 관련공지사항 나옴
     fun NoticeAdapter.search(key:String,option: String){
         db.collection("total")   // 작업할 컬렉션
-            //.orderBy("date", Query.Direction.DESCENDING)
+            .orderBy("date", Query.Direction.DESCENDING)
             .get()      // 문서 가져오기
             .addOnSuccessListener { result ->
                 // 성공할 경우

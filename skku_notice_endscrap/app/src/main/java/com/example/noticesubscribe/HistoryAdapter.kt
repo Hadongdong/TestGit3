@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import java.util.HashMap
 
 class HistoryAdapter (val historyList:ArrayList<Searchhistory>): RecyclerView.Adapter<HistoryAdapter.ViewHolder>() {
     //클릭 인터페이스 구성
@@ -43,6 +44,10 @@ class HistoryAdapter (val historyList:ArrayList<Searchhistory>): RecyclerView.Ad
     override fun getItemCount(): Int {
         return historyList.size
     }
+
+//    fun search3(hashMap: HashMap<String, Any?>, searchOption2: String) {
+//        TODO("Not yet implemented")
+//    }
 
 
     class ViewHolder(itemView:View): RecyclerView.ViewHolder(itemView){

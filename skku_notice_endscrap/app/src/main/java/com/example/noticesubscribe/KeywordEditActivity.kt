@@ -105,8 +105,8 @@ class KeywordEditActivity : AppCompatActivity() {
                     R.id.btn_delete2->itemDelete(mDocuments!!.get(pos))
                 }
             }
-
         }
+        (mainbinding?.rvKeyword?.adapter as KeyWordAdapter).getDataFromFirestore()
         mainbinding?.removeBtn?.setOnClickListener{
             val input = mainbinding?.keywordinput
             input?.getText()?.clear()
@@ -117,7 +117,7 @@ class KeywordEditActivity : AppCompatActivity() {
     // 키워드 삭제 관련부분 참고사이트: https://stackoverflow.com/questions/64370610/android-kotlin-how-can-i-delete-the-data-from-firebase
     fun KeyWordAdapter.getDataFromFirestore() {
         db.collection("Contacts")
-//            .orderBy("date")
+            .orderBy("timestamp", Query.Direction.DESCENDING)
             .addSnapshotListener{ snapshot, exception ->
                 if (exception != null) {
                 }
