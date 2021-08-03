@@ -91,7 +91,7 @@ class HomeFragment : Fragment() {
     //키워드 클릭시 관련공지사항 나옴
     fun NoticeAdapter.search(key:String,option: String){
         db.collection("total")   // 작업할 컬렉션
-            .orderBy("date", Query.Direction.DESCENDING)
+            //.orderBy("date", Query.Direction.DESCENDING)
             .get()      // 문서 가져오기
             .addOnSuccessListener { result ->
                 // 성공할 경우

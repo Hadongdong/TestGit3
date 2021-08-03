@@ -16,6 +16,7 @@ import com.google.firebase.Timestamp.now
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import java.sql.Timestamp
 import java.time.Instant.now
 import java.time.LocalDate.now
@@ -55,21 +56,22 @@ class KeywordEditActivity : AppCompatActivity() {
         mainbinding?.btnAddkeyword?.setOnClickListener {
             val input = binding.keywordinput
             // EditText에서 문자열을 가져와 hashMap으로 만듦
-            val data2 = hashMapOf("key" to input.text.toString())
+            val data2 = hashMapOf("key" to input.text.toString(),"timestamp" to FieldValue.serverTimestamp())
            // val time=hashMapOf<String,Any>("timestamp" to FieldValue.serverTimestamp())
             // Contacts 컬렉션에 data를 자동 이름으로 저장
             db.collection("Contacts")
                 .add(data2)
-                .addOnSuccessListener {
+                .addOnSuccessListener {documentReference ->
                     // 성공할 경우
 //                    db.collection("Contacts")
 //                        .document("key")
 //                        .update(time).addOnCompleteListener{}
                     Toast.makeText(this, "키워드가 추가되었습니다", Toast.LENGTH_SHORT).show()
+                    //itemSort(mDocuments!!.(data2))
                     db.collection("Contacts")//작업할 컬렉션
-//                        .orderBy("timestamp")
+                        .orderBy("timestamp", Query.Direction.DESCENDING)
                         .get() // 문서 가져오기
-                        .addOnSuccessListener { result ->
+                        .addOnSuccessListener { result,->
                             keyList.clear()
                             //성공 경우
                             for (document in result) {
@@ -99,7 +101,6 @@ class KeywordEditActivity : AppCompatActivity() {
         (mainbinding?.rvKeyword?.adapter as KeyWordAdapter).getDataFromFirestore()
         keyadapter.itemClick = object : KeyWordAdapter.ItemClick {
             override fun onClick(view: View, pos: Int) {
-
                 when(view.id){
                     R.id.btn_delete2->itemDelete(mDocuments!!.get(pos))
                 }
@@ -139,7 +140,13 @@ class KeywordEditActivity : AppCompatActivity() {
     fun itemDelete(doc: DocumentSnapshot){
         db.collection("Contacts").document(doc.id)
             .delete()
+
             }
+//    fun itemSort(doc: DocumentSnapshot) {
+//        val updates=hashMapOf<String, Any>("timestamp" to FieldValue.serverTimestamp())
+//        db.collection("Contacts").document(doc.id)
+//            .update(updates).addOnCompleteListener { }
+//    }
    }
 
 

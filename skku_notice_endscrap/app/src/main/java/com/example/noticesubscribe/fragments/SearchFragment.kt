@@ -115,7 +115,6 @@ class SearchFragment : Fragment() {
         //검색어 ,클릭삭제 관련부분
         historyadapter.deleteClick = object:HistoryAdapter.ItemClick {
             override fun onClick(v: View, pos: Int) {
-
                 when(v.id){
                         R.id.btn_delete -> itemDelete(mDocuments!!.get(pos))
                 }
@@ -188,7 +187,7 @@ class SearchFragment : Fragment() {
 //            }
 //    }
 
-    //검색기록의 검색어 클릭통해 공지사항보기 함수(homefragment의 search함수와 비교해서 다른 점 있으면 말씀해주십시오!! 분명히 같은데...)
+    //검색기록의 검색어 클릭통해 공지사항보기 함수
     fun NoticeAdapter.move(word: String, option: String) {
         db.collection("total")   // 작업할 컬렉션2
             //.orderBy()
